@@ -1088,7 +1088,7 @@ void awt_output_flush()
     wlFlushToServer(getEnv());
 }
 
-struct wl_shm_pool *CreateShmPool(size_t size, const char *name, void **data, int* poolFDPtr) {
+struct wl_shm_pool *CreateShmPool(size_t size, const char *name, void **data) {
     if (size <= 0)
         return NULL;
     int poolFD = AllocateSharedMemoryFile(size, name);
@@ -1101,11 +1101,7 @@ struct wl_shm_pool *CreateShmPool(size_t size, const char *name, void **data, in
     }
     *data = memPtr;
     struct wl_shm_pool *pool = wl_shm_create_pool(wl_shm, poolFD, size);
-    if (poolFDPtr != NULL) {
-        *poolFDPtr = poolFD;
-    } else {
-        close(poolFD);
-    }
+    close(poolFD);
     return pool;
 }
 
